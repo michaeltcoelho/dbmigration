@@ -67,7 +67,7 @@ class BaseReadDB(metaclass=abc.ABCMeta):
         pass
 
 
-class XslxReadDB(BaseReadDB):
+class XlsxReadDB(BaseReadDB):
 
     def __init__(self, filename):
         super().__init__(filename=filename)
@@ -102,7 +102,7 @@ class BaseOutputWriterDB(metaclass=abc.ABCMeta):
         pass
 
 
-class XslxWriterDB(BaseOutputWriterDB):
+class XlsxWriterDB(BaseOutputWriterDB):
 
     def __enter__(self) -> None:
         self.workbook = Workbook(write_only=True)
@@ -168,6 +168,6 @@ if __name__ == '__main__':
     parse_args = parser.parse_args()
 
     migrate = Migrate()
-    migrate.set_db1(XslxReadDB(parse_args.db1_filename))
-    migrate.set_db2(XslxReadDB(parse_args.db2_filename))
-    migrate.run(output_db=XslxWriterDB(parse_args.db_dest))
+    migrate.set_db1(XlsxReadDB(parse_args.db1_filename))
+    migrate.set_db2(XlsxReadDB(parse_args.db2_filename))
+    migrate.run(output_db=XlsxWriterDB(parse_args.db_dest))
