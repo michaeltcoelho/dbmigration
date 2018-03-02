@@ -74,15 +74,13 @@ class MigrateTestCase(unittest.TestCase):
 
         mock_db1 = MockReadDB1('')
         mock_db1.STORE.append(
-            ['COLÔNIA DESODORANTE AVON 300 KM/H MAX TURBO', 250],
-            ['', 50],
-        )
+            ['COLÔNIA DESODORANTE AVON 300 KM/H MAX TURBO', 250])
+        mock_db1.STORE.append(['AVON LUCK FOR HIM DEO PARFUM', 50])
 
         mock_db2 = MockReadDB2('')
         mock_db2.STORE.append(
-            ['cOlONiIâ DEZODORRANTE AVÃO 300 KM/H MAX TURBO', 100],
-            ['AVÃO luck for him deo parfum', 124],
-        )
+            ['cOlONiIâ DEZODORRANTE AVÃO 300 KM/H MAX TURBO', 100])
+        mock_db2.STORE.append(['AVÃO luck for him deo parfum', 124])
 
         migrate.set_db1(mock_db1)
         migrate.set_db2(mock_db2)
@@ -94,6 +92,10 @@ class MigrateTestCase(unittest.TestCase):
         self.assertListEqual(
             output_db_mock.STORE[0],
             ['COLÔNIA DESODORANTE AVON 300 KM/H MAX TURBO', 100]
+        )
+        self.assertListEqual(
+            output_db_mock.STORE[1],
+            ['AVON LUCK FOR HIM DEO PARFUM', 124],
         )
 
 
