@@ -15,6 +15,7 @@ Objetivo: Entregar um código capaz de resolver o problema acima escrevendo os d
 import abc
 import argparse
 import functools
+import time
 import unicodedata
 
 from decimal import Decimal
@@ -119,14 +120,8 @@ class XlsxWriterDB(BaseOutputWriterDB):
 
 class Migrate:
 
-    def __init__(self) -> None:
-        self.db1 = None
-        self.db2 = None
-
-    def set_db1(self, db1: BaseReadDB) -> None:
+    def __init__(self, db1: BaseReadDB, db2: BaseReadDB) -> None:
         self.db1 = db1
-
-    def set_db2(self, db2: BaseReadDB) -> None:
         self.db2 = db2
 
     def _iter_products_from_db(self, db: BaseReadDB) -> Generator[Product, None, None]:
@@ -164,10 +159,11 @@ if __name__ == '__main__':
     parser.add_argument('db1_filename', help='Informe o banco1.csv')
     parser.add_argument('db2_filename', help='Informe o banco2.csv')
     parser.add_argument('-d', '--db_dest',
+                        default='{}-migration.xlsx'.format(time.time()),
                         help='Informe um filename do novo banco.')
     parse_args = parser.parse_args()
 
-    migrate = Migrate()
-    migrate.set_db1(XlsxReadDB(parse_args.db1_filename))
-    migrate.set_db2(XlsxReadDB(parse_args.db2_filename))
+    migrate = Migrate(
+        XlsxReadDB(parse_args.db1_filename),
+        XlsxReadDB(parse_args.db2_filename))
     migrate.run(output_db=XlsxWriterDB(parse_args.db_dest))
